@@ -1,0 +1,59 @@
+services:
+  proxy:
+    image: samply/beam-proxy
+    environment:
+      BROKER_URL: https://${BROKER_ID}
+      PROXY_ID: ${SITE_ID}.${BROKER_ID}
+      APP_spot_KEY: spotkey123
+    secrets:
+      - privkey.pem
+      - root.crt.pem
+
+  spot:
+    image: samply/rustyspot
+    ports:
+      - 127.0.0.1:${SPOT_PORT}:8055
+    environment:
+      BEAM_SECRET: spotkey123
+      BEAM_PROXY_URL: http://proxy:8081
+      BEAM_APP_ID: spot.${SITE_ID}.${BROKER_ID}
+      CORS_ORIGIN: http://localhost:${APP_PORT}
+
+  app-default:
+    image: node:22-alpine
+    ports:
+      - 127.0.0.1:${APP_PORT}:5173
+    environment:
+      PUBLIC_BACKEND_URL: http://localhost:${SPOT_PORT}
+    working_dir: /app
+    command: sh -c "npm ci && npm run dev -- --host 0.0.0.0"
+    volumes:
+      - $APP_DIR:/app
+      - /app/node_modules
+
+  app-local-lens:
+    image: node:22-alpine
+    ports:
+      - 127.0.0.1:${APP_PORT}:5173
+    environment:
+      PUBLIC_BACKEND_URL: http://localhost:${SPOT_PORT}
+    working_dir: /app
+    command: sh -c "npm ci && npm install --no-save /lens && npm run dev -- --host 0.0.0.0"
+    volumes:
+      - $LENS_DIR:/lens
+      - $APP_DIR:/app
+      - /app/node_modules
+
+  app-dockerfile:
+    build:
+      context: $APP_DIR
+    ports:
+      - 127.0.0.1:${APP_PORT}:3000
+    environment:
+      PUBLIC_BACKEND_URL: http://localhost:${SPOT_PORT}
+
+secrets:
+  privkey.pem:
+    file: ${PRIVKEY_FILE}
+  root.crt.pem:
+    file: ${ROOT_CRT_FILE}
