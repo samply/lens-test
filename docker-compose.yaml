@@ -1,6 +1,6 @@
 services:
   proxy:
-    image: samply/beam-proxy
+    image: samply/beam-proxy:main
     environment:
       BROKER_URL: https://${BROKER_ID}
       PROXY_ID: ${SITE_ID}.${BROKER_ID}
@@ -10,7 +10,7 @@ services:
       - root.crt.pem
 
   spot:
-    image: samply/rustyspot
+    image: samply/rustyspot:main
     ports:
       - 127.0.0.1:${SPOT_PORT}:8055
     environment:
