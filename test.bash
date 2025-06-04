@@ -14,4 +14,4 @@ source $1
 : ${APP_DIR:=$PROJECT_DIR/$1}
 : ${LENS_DIR:=$PROJECT_DIR/lens}
 
-docker compose -p $1 up proxy spot app${2:--default}
+docker compose -p $1 up proxy spot prism app${2:--default}

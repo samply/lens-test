@@ -5,6 +5,7 @@ services:
       BROKER_URL: https://${BROKER_ID}
       PROXY_ID: ${SITE_ID}.${BROKER_ID}
       APP_spot_KEY: spotkey123
+      APP_prism_KEY: prismkey123
     secrets:
       - privkey.pem
       - root.crt.pem
@@ -18,6 +19,17 @@ services:
       BEAM_PROXY_URL: http://proxy:8081
       BEAM_APP_ID: spot.${SITE_ID}.${BROKER_ID}
       CORS_ORIGIN: http://localhost:${APP_PORT}
+      PRISM_URL: http://prism:8080
+
+  prism:
+    image: samply/prism:main
+    environment:
+      API_KEY: prismkey123
+      BEAM_PROXY_URL: http://proxy:8081
+      BEAM_APP_ID_LONG: prism.${SITE_ID}.${BROKER_ID}
+      CORS_ORIGIN: http://localhost:${SPOT_PORT}
+      SITES: ${PRISM_SITES}
+      PROJECT: ${PRISM_PROJECT}
 
   app-default:
     image: node:22-alpine

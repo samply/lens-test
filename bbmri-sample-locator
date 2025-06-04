@@ -1,3 +1,5 @@
 BROKER_ID=broker.bbmri.samply.de
 SPOT_PORT=5124
 APP_PORT=4124
+PRISM_SITES="aachen;berlin;brno;brno-recetox;cyprus;dresden;essen;frankfurt;goettingen;hannover;heidelberg;hradec-kralove;leipzig;luebeck;mannheim;marburg;muenchen-hmgu;muenster;naples-pascale;olomouc;pilsen;prague-ffm;prague-ior;prague-uhkt;regensburg;rome;rome-opbg;uppsala;wuerzburg"
+PRISM_PROJECT=bbmri
